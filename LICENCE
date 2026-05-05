@@ -1,0 +1,15 @@
+Copyright (c) 2024 RemotePulse - Seymen Sözen & Siyami Ataberk Yılmazer
+
+Bu proje MIT Lisansı ile korunmaktadır, ancak sürüm yönetimi ve modifikasyonlar için aşağıdaki özel şartlar geçerlidir:
+
+Özgürlük: Bu yazılımı ticari olmayan amaçlarla kullanabilir, inceleyebilir ve yerel ortamınızda değiştirebilirsiniz.
+
+Modifikasyon ve Yayınlama: Yazılımın kodunda köklü bir değişiklik yapmak veya yeni bir sürümünü (fork) halka açık bir şekilde yayınlamak isterseniz:
+
+Öncelikle projenin resmi deposunda bir Issue (Sorun Kaydı) açmalısınız.
+
+Yapmak istediğiniz değişiklikleri ve nedenlerini bu Issue üzerinden belirtmelisiniz.
+
+Geliştiriciler (Seymen Sözen veya Siyami Ataberk Yılmazer) tarafından yazılı onay verilmeden, değiştirilmiş versiyonlar "RemotePulse" adı altında veya projeyi referans alarak halka açık yayınlanamaz.
+
+Onay Süreci: Onaylanan değişiklikler, projenin ana dalına (main branch) dahil edilebilir veya onay belgesiyle bağımsız yayınlanabilir.
