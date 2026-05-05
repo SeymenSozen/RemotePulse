@@ -1,5 +1,3 @@
----
-
 # 🌐 RemotePulse
 
 **RemotePulse**, bilgisayarınızı yerel ağ (LAN) üzerinden herhangi bir cihazla yönetmenizi sağlayan, Flask tabanlı bir uzaktan kontrol arayüzüdür. Tek bir dokunuşla bilgisayarınızı kilitleyebilir, kapatabilir veya medya içeriklerinizi yönetebilirsiniz.
