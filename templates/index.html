@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RemotePulse Management Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/latest/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        .button-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: flex-start;
+        }
+
+        .post-form {
+            margin: 0;
+        }
+
+        .nav-button {
+            width: 120px;
+            height: 120px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .nav-button:hover {
+            background-color: #222;
+            border-color: #00d4ff;
+            transform: translateY(-3px);
+            color: #00d4ff;
+        }
+
+        .btn-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            pointer-events: none;
+        }
+
+        .btn-text {
+            font-size: 14px;
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        /* --- Kırmızı Gölgelendirme (Tıklanınca) --- */
+        .nav-button.active-red {
+            background-color: #2a0808;
+            border-color: #ff3333;
+            color: #ff3333;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.5); /* Kırmızı parlama/gölge efekti */
+        }
+
+        .nav-button.active-red:hover {
+            background-color: #3d0b0b;
+            border-color: #ff4d4d;
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.8);
+            color: #ff4d4d;
+        }
+
+        @media (max-width: 480px) {
+            .nav-button { width: 100px; height: 100px; }
+            .btn-text { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid">
+        <h2 class="mb-4" style="color: #333;">Kontrol Paneli</h2>
+        
+        <div class="button-grid">
+            
+            <!-- Mevcut Butonlar -->
+            <form action="/action/shutdown" method="POST" class="post-form">
+                <button type="submit" class="nav-button">
+                    <div class="btn-icon">⏻</div>
+                    <div class="btn-text">Bilgisayarı Kapat</div>
+                </button>
+            </form>
+
+            <form action="/action/lock" method="POST" class="post-form">
+                <button type="submit" class="nav-button">
+                    <div class="btn-icon">🔒</div>
+                    <div class="btn-text">Ekranı Kilitle</div>
+                </button>
+            </form>
+
+            <form action="/action/restart" method="POST" class="post-form">
+                <button type="submit" class="nav-button">
+                    <div class="btn-icon">🔄</div>
+                    <div class="btn-text">Yeniden Başlat</div>
+                </button>
+            </form>
+
+            <!-- --- YENİ EKLENEN BUTONLAR --- -->
+            
+            <!-- Play/Pause Butonu -->
+            <button type="button" class="nav-button" id="btn-play" onclick="togglePlay()">
+                <div class="btn-icon" id="icon-play">⏸️</div>
+                <div class="btn-text" id="text-play">Duraklat</div>
+            </button>
+
+            <!-- Mute/Unmute Butonu -->
+            <button type="button" class="nav-button" id="btn-mute" onclick="toggleMute()">
+                <div class="btn-icon" id="icon-mute">🔊</div>
+                <div class="btn-text" id="text-mute">Ses Açık</div>
+            </button>
+
+        </div>
+    </div>
+
+    <!-- --- JAVASCRIPT KISMI --- -->
+    <script>
+        // Oynatma Durumu (Müzik başta çaldığı için isPaused = false olarak başlıyor)
+        let isPaused = false; 
+        
+        function togglePlay() {
+            const btn = document.getElementById('btn-play');
+            const icon = document.getElementById('icon-play');
+            const text = document.getElementById('text-play');
+
+            isPaused = !isPaused; // Durumu tersine çevir
+
+            if (isPaused) {
+                // Tıklandığında: Müzik durdu (Kırmızı & Gölgeli yanar, tekrar başlatmak için Oynat yazar)
+                btn.classList.add('active-red');
+                icon.textContent = '▶️';
+                text.textContent = 'Oynat';
+            } else {
+                // Tekrar tıklandığında: Müzik çalmaya başlar (Normal mavi hover haline döner)
+                btn.classList.remove('active-red');
+                icon.textContent = '⏸️';
+                text.textContent = 'Duraklat';
+            }
+
+            // Arka planda Python'daki play-pouse route'una POST isteği at
+            fetch('/action/play-pouse', { method: 'POST' })
+                .catch(err => console.error("Oynatma hatası:", err));
+        }
+
+        // Ses Durumu Değişkeni
+        let isMuted = false;
+
+        function toggleMute() {
+            const btn = document.getElementById('btn-mute');
+            const icon = document.getElementById('icon-mute');
+            const text = document.getElementById('text-mute');
+
+            isMuted = !isMuted; // Durumu tersine çevir
+
+            if (isMuted) {
+                // Tıklandığında: Mute (Kırmızı & Gölgeli)
+                btn.classList.add('active-red');
+                icon.textContent = '🔇';
+                text.textContent = 'Sessiz';
+            } else {
+                // Eski haline döndüğünde: Unmute (Normal Mavi Hover)
+                btn.classList.remove('active-red');
+                icon.textContent = '🔊';
+                text.textContent = 'Ses Açık';
+            }
+
+            // Arka planda Python'daki mute-unmute route'una POST isteği at
+            fetch('/action/mute-unmute', { method: 'POST' })
+                .catch(err => console.error("Ses değiştirme hatası:", err));
+        }
+    </script>
+
+</body>
+</html>

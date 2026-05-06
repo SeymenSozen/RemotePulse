@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 3 saniye sonra ana dizine (/) yönlendirir -->
+    <meta http-equiv="refresh" content="3;url=/"> 
+    <title>RemotePulse Neon Display</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000000;
+            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .neon-text {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-align: center;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px #00d4ff,
+                0 0 40px #00d4ff,
+                0 0 80px #00d4ff,
+                0 0 90px #00d4ff,
+                0 0 100px #00d4ff;
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.9; text-shadow: 0 0 10px #fff, 0 0 20px #00d4ff, 0 0 40px #00d4ff; }
+            100% { opacity: 1; text-shadow: 0 0 15px #fff, 0 0 30px #00d4ff, 0 0 60px #00d4ff, 0 0 100px #00d4ff; }
+        }
+
+        @media (max-width: 768px) {
+            .neon-text { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="neon-text">
+        {{ action_message }}
+    </div>
+
+    <script>
+        // Alternatif olarak JS ile yönlendirme (Daha güvenli bir yedek)
+        setTimeout(function() {
+            window.location.href = "/";
+        }, 3000); // 3000 milisaniye = 3 saniye
+    </script>
+</body>
+</html>
